@@ -1,0 +1,231 @@
+/*
+|--------------------------------------------------------------------------
+| GLOBAL CONFIGURATION AND VARIABLES
+|--------------------------------------------------------------------------
+| Defines the custom color palette, typography, and foundational theme.
+*/
+:root {
+    /* --- Color Palette --- */
+    --bg-color: #050a14;           /* Primary background color (Deep Navy/Black) */
+    --card-bg-color: rgba(10, 25, 47, 0.75); /* UI element background (Translucent Dark Blue) */
+    --primary-color: #00ffff;      /* Main interactive/highlight color (Electric Cyan) */
+    --primary-glow: rgba(0, 255, 255, 0.5); /* Shadow/Glow effect for primary color */
+    --secondary-color: #ffffff;    /* Secondary highlight/Text color (Pure White) */
+    --text-color: #f5f5f5;         /* Readable main text color */
+    --text-muted: #aaa;            /* Muted text for descriptions */
+    
+    /* --- State Colors --- */
+    --disabled-color: #444;        /* Border color for disabled elements */
+    --disabled-text: #777;         /* Text color for disabled elements */
+
+    /* --- Typography --- */
+    --font-family: 'Consolas', 'Monaco', 'Menlo', 'Courier New', monospace; /* Monospace/Terminal font stack */
+}
+
+/*
+|--------------------------------------------------------------------------
+| BASE STYLES AND RESET
+|--------------------------------------------------------------------------
+| Applies a standard reset and defines the global document flow.
+*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Ensures padding and border are included in element's total width/height */
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column; /* Stacks header, main, and footer vertically */
+    min-height: 100vh;      /* Ensures footer sticks to the bottom */
+
+    /* Subtly draws a grid pattern across the entire background for a HUD effect */
+    background-image:
+        linear-gradient(rgba(0, 255, 255, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 255, 0.07) 1px, transparent 1px);
+    background-size: 25px 25px;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto; /* Centers the main content wrapper */
+}
+
+/*
+|--------------------------------------------------------------------------
+| HEADER STYLING
+|--------------------------------------------------------------------------
+| Styles the site header/navigation banner.
+*/
+header {
+    background-color: var(--card-bg-color);
+    padding: 2rem 0;
+    text-align: center;
+    /* Adds a glowing bottom border, simulating an energy shield or display frame */
+    border-bottom: 2px solid var(--primary-color);
+    box-shadow: 0 2px 20px var(--primary-glow);
+    backdrop-filter: blur(8px); /* Applies a subtle frosted glass effect */
+}
+
+header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+    /* Adds a neon text glow effect */
+    text-shadow: 0 0 8px var(--primary-glow), 0 0 2px var(--secondary-color);
+}
+
+header p {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| MAIN CONTENT & SECTION HEADINGS
+|--------------------------------------------------------------------------
+| Styles the main content area and titles within it.
+*/
+main {
+    flex: 1; /* Allows the main area to consume all available vertical space */
+    padding: 2rem 0;
+}
+
+main h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    /* Styles the section title with a secondary highlight color */
+    border-bottom: 2px solid var(--secondary-color);
+    display: inline-block;
+    padding-bottom: 0.5rem;
+    color: var(--secondary-color);
+    text-shadow: 0 0 5px var(--secondary-color);
+}
+
+/*
+|--------------------------------------------------------------------------
+| GAME CARD GRID LAYOUT
+|--------------------------------------------------------------------------
+| Defines the responsive grid structure for the simulation modules.
+*/
+#game-grid {
+    display: grid;
+    /* Creates an auto-fitting grid with minimum column size of 300px */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+/*
+|--------------------------------------------------------------------------
+| GAME CARD STYLING
+|--------------------------------------------------------------------------
+| Styles the individual card components for each simulation.
+*/
+.game-card {
+    background-color: var(--card-bg-color);
+    border: 1px solid var(--primary-color);
+    /* Applies a digital, cut-off corner effect using clip-path */
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    box-shadow: 0 0 8px var(--primary-glow);
+    backdrop-filter: blur(5px);
+}
+
+.game-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    /* Lifts the card and strengthens the glow on hover */
+    box-shadow: 0 0 25px var(--primary-glow);
+}
+
+.game-card .card-content {
+    padding: 1.5rem;
+    flex-grow: 1; /* Ensures content pushes the button to the bottom */
+}
+
+.game-card h3 {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    text-shadow: 0 0 5px var(--primary-glow);
+    margin-bottom: 0.75rem;
+}
+
+.game-card p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+}
+
+/*
+|--------------------------------------------------------------------------
+| PLAY BUTTON STYLING (Active State)
+|--------------------------------------------------------------------------
+| Styles the link used to start the simulation.
+*/
+.btn-play {
+    display: block;
+    width: 100%;
+    padding: 0.75rem;
+    background-color: transparent;
+    border-top: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: background-color 0.2s, color 0.2s, text-shadow 0.2s, box-shadow 0.2s;
+}
+
+.btn-play:hover {
+    /* Inverts colors and adds a strong glow for the "activated" effect */
+    background-color: var(--primary-color);
+    color: #000; /* Crisp black text against neon */
+    text-shadow: none;
+    box-shadow: 0 0 15px var(--primary-glow);
+}
+
+/*
+|--------------------------------------------------------------------------
+| DISABLED BUTTON STATE
+|--------------------------------------------------------------------------
+| Styles the buttons that are not yet active/finished.
+*/
+.btn-play.disabled {
+    background-color: transparent;
+    border-top: 1px solid var(--disabled-color);
+    color: var(--disabled-text);
+    cursor: not-allowed;
+}
+
+.btn-play.disabled:hover {
+    background-color: transparent; /* No hover effect when disabled */
+    color: var(--disabled-text);
+    box-shadow: none;
+    text-shadow: none;
+}
+
+/*
+|--------------------------------------------------------------------------
+| FOOTER STYLING
+|--------------------------------------------------------------------------
+| Styles the copyright and credits section.
+*/
+footer {
+    background-color: #0a0f1a; /* Darker background for distinction */
+    border-top: 1px solid var(--text-muted);
+    text-align: center;
+    padding: 1.5rem 0;
+    margin-top: auto; /* Pushes the footer to the bottom of the viewport */
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Sim: Monkey & Banana</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+    <div class="game-container">
+
+        <header class="game-header">
+            <a href="../../index.html" class="btn-back">&larr; Back to Lab</a>
+            <h1>Monkey & Banana Problem</h1>
+        </header>
+
+        <div class="message-area">
+            <p id="message">Goal: Help the monkey get the bananas!</p>
+        </div>
+
+        <div class="simulation-world">
+            <img id="bananas" class="world-object" src="images/bananas.png" alt="Bananas">
+            <img id="box" class="world-object" src="images/box.png" alt="Box">
+            <img id="monkey" class="world-object" src="images/monkey.png" alt="Monkey">
+
+            <div class="location-marker" id="marker-door">Door</div>
+            <div class="location-marker" id="marker-box">Box's Start</div>
+            <div class="location-marker" id="marker-bananas">Under Bananas</div>
+        </div>
+        
+        <div class="controls-panel">
+            <h3>Actions (Operators)</h3>
+            <button id="walk-to-box" class="btn-action">Walk to Box</button>
+            <button id="push-box" class="btn-action">Push Box to Bananas</button>
+            <button id="climb-box" class="btn-action">Climb on Box</button>
+            <button id="grab-bananas" class="btn-action">Grab Bananas</button>
+            
+            <button id="walk-to-door" class="btn-action">Walk to Door</button>
+            <button id="climb-off-box" class="btn-action">Climb Off Box</button>
+
+            <button id="restart-button" class="btn-play">Restart</button>
+        </div>
+
+    </div>
+
+</body>
+</html>

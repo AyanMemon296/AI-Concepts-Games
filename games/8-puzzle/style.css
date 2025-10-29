@@ -1,0 +1,203 @@
+/* --- Global Variables & Theme Configuration --- */
+:root {
+    --bg-color: #050a14;
+    --card-bg-color: rgba(10, 25, 47, 0.75);
+    --primary-color: #00ffff;
+    --primary-glow: rgba(0, 255, 255, 0.5);
+    --secondary-color: #ffffff;
+    --text-color: #f5f5f5;
+    --text-muted: #aaa;
+    --font-family: 'Consolas', 'Monaco', 'Menlo', 'Courier New', monospace;
+    
+    /* Define tile size and gap for easy adjustment */
+    --tile-size: 100px;
+    --tile-gap: 8px;
+}
+
+/* --- Basic Reset --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    
+    /* HUD grid background */
+    background-image:
+        linear-gradient(rgba(0, 255, 255, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 255, 0.07) 1px, transparent 1px);
+    background-size: 25px 25px;
+}
+
+.game-container {
+    width: 90%;
+    /* Calculate max width based on 3 tiles + 2 gaps */
+    max-width: calc((var(--tile-size) * 3) + (var(--tile-gap) * 2) + (2rem * 2));
+    background-color: var(--card-bg-color);
+    border: 1px solid var(--primary-color);
+    box-shadow: 0 0 25px var(--primary-glow);
+    backdrop-filter: blur(8px);
+    padding: 2rem;
+    text-align: center;
+}
+
+/* --- Header & Back Button --- */
+.game-header {
+    margin-bottom: 1.5rem;
+}
+
+.game-header h1 {
+    font-size: 2rem;
+    color: var(--primary-color);
+    text-shadow: 0 0 8px var(--primary-glow);
+    margin-top: 1rem;
+}
+
+.btn-back {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+.btn-back:hover {
+    background-color: var(--primary-color);
+    color: #000;
+    box-shadow: 0 0 15px var(--primary-glow);
+}
+
+/* --- Game Info (Moves/Time) --- */
+.game-info {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 1.5rem;
+}
+
+.info-box {
+    background-color: rgba(5, 10, 20, 0.5);
+    border: 1px solid var(--primary-color);
+    padding: 0.5rem 1rem;
+    min-width: 120px;
+}
+
+.info-box span {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.info-box p {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--secondary-color);
+}
+
+/* --- Game Board Styling --- */
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(3, var(--tile-size));
+    grid-template-rows: repeat(3, var(--tile-size));
+    gap: var(--tile-gap);
+    
+    /* Center the board */
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    
+    /* Background for the grid container */
+    background-color: rgba(5, 10, 20, 0.5);
+    border: 2px solid var(--primary-color);
+    box-shadow: 0 0 5px var(--primary-glow) inset;
+    padding: var(--tile-gap);
+}
+
+.tile {
+    width: var(--tile-size);
+    height: var(--tile-size);
+    background-color: var(--card-bg-color);
+    border: 1px solid var(--primary-color);
+    
+    /* Center the number */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--secondary-color);
+    
+    cursor: pointer;
+    user-select: none; /* Prevent text selection */
+    
+    transition: transform 0.2s ease-out, background-color 0.2s, box-shadow 0.2s;
+}
+
+.tile:hover {
+    background-color: rgba(0, 255, 255, 0.1);
+    border-width: 2px;
+}
+
+/* --- New Class for Editor Mode --- */
+.tile-selected {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 15px var(--secondary-color);
+}
+
+/* The "empty" tile (tile number 0) */
+.tile-empty {
+    opacity: 0;
+    cursor: default;
+}
+
+.tile-empty:hover {
+    background-color: transparent;
+    border-width: 1px;
+}
+
+/* --- Controls & Message --- */
+.game-controls #message {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
+    min-height: 1.5rem; /* Prevent layout shift */
+}
+
+/* --- New Button Group --- */
+.button-group {
+    display: flex;
+    gap: 1rem;
+}
+
+/* Re-use the 'btn-play' style */
+.btn-play {
+    display: block;
+    width: 100%;
+    padding: 0.75rem;
+    background-color: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-play:hover {
+    background-color: var(--primary-color);
+    color: #000;
+    text-shadow: none;
+    box-shadow: 0 0 15px var(--primary-glow);
+}

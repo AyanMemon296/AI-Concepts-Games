@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Sim: Water Jug Problem</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+    <div class="game-container">
+
+        <header class="game-header">
+            <a href="../../index.html" class="btn-back">&larr; Back to Lab</a>
+            <h1>Water Jug Problem</h1>
+        </header>
+
+        <div class="setup-area">
+            <h3>Simulation Setup</h3>
+            <div class="setup-grid">
+                <div class="input-group">
+                    <label for="jug-a-cap">Jug A Capacity</label>
+                    <input type="number" id="jug-a-cap" value="5" min="1">
+                </div>
+                <div class="input-group">
+                    <label for="jug-b-cap">Jug B Capacity</label>
+                    <input type="number" id="jug-b-cap" value="4" min="1">
+                </div>
+                <div class="input-group">
+                    <label for="goal-amount">Goal Amount</label>
+                    <input type="number" id="goal-amount" value="2" min="1">
+                </div>
+                <div class="input-group radio-group">
+                    <label>Goal in:</label>
+                    <div class="radio-wrapper">
+                        <input type="radio" id="goal-jug-a" name="goal-jug" value="a">
+                        <label for="goal-jug-a">Jug A</label>
+                    </div>
+                    <div class="radio-wrapper">
+                        <input type="radio" id="goal-jug-b" name="goal-jug" value="b" checked>
+                        <label for="goal-jug-b">Jug B</label>
+                    </div>
+                </div>
+            </div>
+            <button id="start-button" class="btn-play">Start / Reset</button>
+            <p id="setup-error"></p>
+        </div>
+
+        <div class="goal-display">
+            <p id="goal-text"></p>
+            <p id="win-message"></p>
+        </div>
+
+        <div class="simulation-area">
+            
+            <div class="jug-area">
+                <div class="jug" id="jug-container-a">
+                    <div class="water-level" id="water-a"></div>
+                    <span class="jug-label" id="label-a">0L / 5L</span>
+                    <span class="jug-name" id="jug-a-name">Jug A (5L)</span>
+                </div>
+                
+                <div class="jug" id="jug-container-b">
+                    <div class="water-level" id="water-b"></div>
+                    <span class="jug-label" id="label-b">0L / 4L</span>
+                    <span class="jug-name" id="jug-b-name">Jug B (4L)</span>
+                </div>
+            </div>
+
+            <div class="controls-panel">
+                <h3>Actions (Operators)</h3>
+                <button id="fill-a" class="btn-action">Fill Jug A</button>
+                <button id="fill-b" class="btn-action">Fill Jug B</button>
+                <button id="empty-a" class="btn-action">Empty Jug A</button>
+                <button id="empty-b" class="btn-action">Empty Jug B</button>
+                <button id="pour-a-to-b" class="btn-action">Pour A &rarr; B</button>
+                <button id="pour-b-to-a" class="btn-action">Pour B &rarr; A</button>
+            </div>
+        </div>
+        
+        <div class="history-controls">
+            <div class="history-log">
+                <h3>State History (A, B)</h3>
+                <div id="log-content">
+                    </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

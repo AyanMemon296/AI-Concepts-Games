@@ -1,0 +1,205 @@
+/* --- Global Variables & Theme Configuration --- */
+:root {
+    --bg-color: #050a14;
+    --card-bg-color: rgba(10, 25, 47, 0.75);
+    --primary-color: #00ffff;
+    --primary-glow: rgba(0, 255, 255, 0.5);
+    --secondary-color: #ffffff;
+    --error-color: #ff4d4d; /* For Cannibals */
+    --text-color: #f5f5f5;
+    --text-muted: #aaa;
+    --font-family: 'Consolas', 'Monaco', 'Menlo', 'Courier New', monospace;
+}
+
+/* --- Basic Reset --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 2rem 0;
+    
+    /* HUD grid background */
+    background-image:
+        linear-gradient(rgba(0, 255, 255, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 255, 0.07) 1px, transparent 1px);
+    background-size: 25px 25px;
+}
+
+.game-container {
+    width: 90%;
+    max-width: 900px;
+    background-color: var(--card-bg-color);
+    border: 1px solid var(--primary-color);
+    box-shadow: 0 0 25px var(--primary-glow);
+    backdrop-filter: blur(8px);
+    padding: 2rem;
+    text-align: center;
+}
+
+/* --- Header & Back Button --- */
+.game-header {
+    margin-bottom: 1rem;
+}
+.game-header h1 {
+    font-size: 2rem;
+    color: var(--primary-color);
+    text-shadow: 0 0 8px var(--primary-glow);
+    margin-top: 1rem;
+}
+.btn-back {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+.btn-back:hover {
+    background-color: var(--primary-color);
+    color: #000;
+    box-shadow: 0 0 15px var(--primary-glow);
+}
+
+/* --- Message Area --- */
+.message-area {
+    padding: 0.75rem;
+    margin-bottom: 1.5rem;
+    min-height: 2.5rem;
+    background-color: rgba(5, 10, 20, 0.5);
+    border: 1px solid var(--text-muted);
+}
+.message-area p {
+    font-size: 1.1rem;
+    transition: color 0.3s;
+}
+.message-area .win {
+    color: var(--primary-color);
+    font-weight: bold;
+}
+.message-area .lose {
+    color: var(--error-color);
+    font-weight: bold;
+}
+
+/* --- Simulation World --- */
+.simulation-world {
+    display: flex;
+    width: 100%;
+    height: 350px;
+    border: 1px solid var(--primary-color);
+    background-color: rgba(5, 10, 20, 0.5);
+    padding: 1rem;
+    align-items: flex-end; /* Puts items at the "bottom" */
+}
+.bank {
+    flex: 1; /* Banks take up equal space */
+    height: 100%;
+    padding: 0.5rem;
+    border-bottom: 5px solid var(--primary-color);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-content: flex-start;
+}
+.river {
+    width: 200px;
+    height: 100%;
+    background-color: rgba(0, 50, 100, 0.3);
+    position: relative;
+    border-bottom: 5px solid #007bff;
+}
+.boat {
+    width: 120px;
+    height: 60px;
+    background-color: var(--card-bg-color);
+    border: 2px solid var(--primary-color);
+    position: absolute;
+    bottom: 5px; /* Just above the "ground" */
+    left: -10px; /* Start at left bank */
+    transition: left 0.7s ease-in-out;
+    padding: 0.25rem;
+    display: flex;
+    gap: 0.25rem;
+    justify-content: center;
+    align-items: center;
+}
+.boat.on-right-bank {
+    /* (200px river) - (120px boat) + 10px padding */
+    left: 90px;
+}
+
+/* --- Characters --- */
+.character {
+    width: 40px;
+    height: 60px;
+    cursor: grab;
+    transition: opacity 0.2s, box-shadow 0.2s;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #000;
+    user-select: none;
+}
+.missionary {
+    background-color: var(--primary-color);
+    text-shadow: 0 0 5px #000;
+}
+.cannibal {
+    background-color: var(--error-color);
+    text-shadow: 0 0 5px #000;
+}
+
+/* --- Drag-and-Drop Helper Classes --- */
+.character.dragging {
+    opacity: 0.5;
+    cursor: grabbing;
+}
+.dropzone.drag-over {
+    background-color: rgba(0, 255, 255, 0.1);
+    box-shadow: 0 0 10px var(--primary-glow) inset;
+}
+
+/* --- Controls --- */
+.controls {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+/* Re-use 'btn-play' style */
+.btn-play {
+    flex: 1;
+    padding: 0.75rem;
+    background-color: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    font-family: var(--font-family);
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.btn-play:hover:not(:disabled) {
+    background-color: var(--primary-color);
+    color: #000;
+    text-shadow: none;
+    box-shadow: 0 0 15px var(--primary-glow);
+}
+.btn-play:disabled {
+    border-color: #444;
+    color: #777;
+    cursor: not-allowed;
+}

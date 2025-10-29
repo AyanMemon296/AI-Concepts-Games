@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Sim: Missionaries & Cannibals</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+    <div class="game-container">
+
+        <header class="game-header">
+            <a href="../../index.html" class="btn-back">&larr; Back to Lab</a>
+            <h1>Missionaries & Cannibals</h1>
+        </header>
+
+        <div class="message-area">
+            <p id="message">Move all 3 Missionaries and 3 Cannibals to the right bank. Good luck.</p>
+        </div>
+
+        <div class="simulation-world">
+            
+            <div class="bank dropzone" id="bank-left">
+                </div>
+            
+            <div class="river">
+                <div class="boat dropzone" id="boat">
+                    </div>
+            </div>
+
+            <div class="bank dropzone" id="bank-right">
+                </div>
+
+        </div>
+        
+        <div class="controls">
+            <button id="restart-button" class="btn-play">Restart</button>
+            <button id="cross-river-button" class="btn-play">Cross River</button>
+        </div>
+
+    </div>
+
+</body>
+</html>

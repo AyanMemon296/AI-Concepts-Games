@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Sim: Tower of Hanoi</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+    <div class="game-container">
+
+        <header class="game-header">
+            <a href="../../index.html" class="btn-back">&larr; Back to Lab</a>
+            <h1>Tower of Hanoi</h1>
+        </header>
+
+        <div class="setup-area">
+            <div class="disk-slider">
+                <label for="disk-count">Number of Disks: <span id="disk-count-label">3</span></label>
+                <input type="range" id="disk-count" min="3" max="8" value="3">
+            </div>
+            <button id="restart-button" class="btn-play">Start / Reset</button>
+        </div>
+
+        <div class="game-info">
+            <div class="info-box">
+                <span>Your Moves</span>
+                <p id="move-count">0</p>
+            </div>
+            <div class="info-box">
+                <span>Minimum Moves</span>
+                <p id="min-moves">7</p>
+            </div>
+        </div>
+
+        <div class="message-area">
+            <p id="message">Move all disks from Rod A to Rod C.</p>
+        </div>
+
+        <div class="game-board">
+            <div class="rod-container">
+                <div class="rod dropzone" id="rod-a"></div>
+                <span>A</span>
+            </div>
+            <div class="rod-container">
+                <div class="rod dropzone" id="rod-b"></div>
+                <span>B</span>
+            </div>
+            <div class="rod-container">
+                <div class="rod dropzone" id="rod-c"></div>
+                <span>C</span>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

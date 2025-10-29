@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Sim: 8-Puzzle</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+    <div class="game-container">
+
+        <header class="game-header">
+            <a href="../../index.html" class="btn-back">&larr; Back to Lab</a>
+            <h1>8-Puzzle</h1>
+        </header>
+
+        <div class="game-info">
+            <div class="info-box">
+                <span>Moves</span>
+                <p id="move-count">0</p>
+            </div>
+            <div class="info-box">
+                <span>Time</span>
+                <p id="timer">00:00</p>
+            </div>
+        </div>
+
+        <div class="game-board" id="game-board">
+            </div>
+
+        <div class="game-controls">
+            <p id="message">Click 'Shuffle' or 'Set Up' to begin!</p>
+            <div class="button-group">
+                <button id="shuffle-button" class="btn-play">Shuffle</button>
+                <button id="setup-button" class="btn-play">Set Up Board</button>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
