@@ -11,12 +11,15 @@
     --text-muted: #aaa;
     --font-family: 'Consolas', 'Monaco', 'Menlo', 'Courier New', monospace;
 
-    /* CRITICAL FIX: Base sizes on fluid units */
-    --char-width: 6.5vw;
-    --char-height: 10vw;
+    /* CRITICAL FIX: Base sizes on fluid units for mobile */
+    --char-width: 10vw;
+    /* Base width is 10% of viewport width */
+    --char-height: 15vw;
+    /* Base height */
     --river-width-ratio: 0.35;
     /* River is 35% of max width */
-    --boat-width: 10vw;
+    --boat-width: 15vw;
+    /* Boat size scales with viewport */
 }
 
 /* --- Basic Reset --- */
@@ -35,36 +38,34 @@ body {
     align-items: flex-start;
     min-height: 100vh;
     padding: 1rem 0.5rem;
-    /* Added padding for better viewport margins */
 
     /* HUD grid background */
     background-image:
         linear-gradient(rgba(0, 255, 255, 0.07) 1px, transparent 1px),
         linear-gradient(90deg, rgba(0, 255, 255, 0.07) 1px, transparent 1px);
     background-size: 25px 25px;
+    overflow-x: hidden;
 }
 
 .game-container {
     width: 95%;
-    /* Use more width on mobile */
-    max-width: 650px;
-    /* Reduced max-width for better tablet fit */
+    max-width: 900px;
+    /* Restored larger max-width */
     background-color: var(--card-bg-color);
     border: 1px solid var(--primary-color);
     box-shadow: 0 0 25px var(--primary-glow);
     backdrop-filter: blur(8px);
     padding: 1.5rem 1rem;
-    /* Adjusted padding */
     text-align: center;
 }
 
-/* --- Header & Back Button --- */
+/* --- Header & Message Area --- (Restored standard sizes) */
 .game-header {
     margin-bottom: 1rem;
 }
 
 .game-header h1 {
-    font-size: 1.8rem;
+    font-size: 2rem;
     color: var(--primary-color);
     text-shadow: 0 0 8px var(--primary-glow);
     margin-top: 0.5rem;
@@ -79,6 +80,8 @@ body {
     text-decoration: none;
     font-weight: bold;
     transition: all 0.2s;
+    position: relative;
+    z-index: 10;
 }
 
 .btn-back:hover {
@@ -87,7 +90,6 @@ body {
     box-shadow: 0 0 15px var(--primary-glow);
 }
 
-/* --- Message Area --- */
 .message-area {
     padding: 0.75rem;
     margin-bottom: 1rem;
@@ -97,45 +99,38 @@ body {
 }
 
 .message-area p {
-    font-size: 1rem;
+    font-size: 1.1rem;
     transition: color 0.3s;
 }
 
-/* --- Simulation World (CRITICAL FIXES) --- */
+/* --- Simulation World (FLUID BASE) --- */
 .simulation-world {
     display: flex;
     width: 100%;
-    height: 250px;
-    /* Reduced overall height for mobile */
+    height: 350px;
+    /* Restored height */
     border: 1px solid var(--primary-color);
     background-color: rgba(5, 10, 20, 0.5);
     padding: 0.5rem;
-    /* Reduced padding */
     align-items: flex-end;
 
-    /* Ensure content stays within bounds and scales */
+    /* Ensure content stays within bounds but is allowed to flow */
     min-width: 350px;
-    /* Maintain a minimum readable size */
-    max-width: 100%;
     overflow-x: auto;
-    /* Allow horizontal scroll if necessary */
 }
 
 .bank {
     flex: 1;
-    /* Banks take up equal remaining space */
     height: 100%;
     padding: 0.25rem;
     border-bottom: 5px solid var(--primary-color);
     display: flex;
     flex-wrap: wrap;
     gap: 0.25rem;
-    /* Reduced gap */
     align-content: flex-start;
 }
 
 .river {
-    /* Use percentage of max-width for river width */
     width: calc(var(--river-width-ratio) * 100%);
     height: 100%;
     background-color: rgba(0, 50, 100, 0.3);
@@ -144,16 +139,13 @@ body {
 }
 
 .boat {
-    /* Boat width is now relative to viewport/container */
     width: var(--boat-width);
     height: calc(var(--char-height) * 0.9);
-    /* Height relative to character height */
     background-color: var(--card-bg-color);
     border: 2px solid var(--primary-color);
     position: absolute;
     bottom: 5px;
     left: -5px;
-    /* Adjust start position */
     transition: left 0.7s ease-in-out;
     padding: 0.2rem;
     display: flex;
@@ -163,13 +155,11 @@ body {
 }
 
 .boat.on-right-bank {
-    /* Recalculate right position based on fluid widths */
     left: calc(100% - var(--boat-width) + 5px);
 }
 
 /* --- Characters (FLUID SIZING) --- */
 .character {
-    /* Sizing is based on viewport width (vw) */
     width: var(--char-width);
     height: var(--char-height);
     cursor: grab;
@@ -182,7 +172,6 @@ body {
     user-select: none;
     font-size: calc(var(--char-width) * 0.4);
     min-width: 30px;
-    /* Ensure a minimum size */
     min-height: 40px;
 }
 
@@ -196,24 +185,12 @@ body {
     text-shadow: 0 0 5px #000;
 }
 
-/* --- Drag-and-Drop Helper Classes --- */
-.character.dragging {
-    opacity: 0.5;
-    cursor: grabbing;
-}
-
-.dropzone.drag-over {
-    background-color: rgba(0, 255, 255, 0.1);
-    box-shadow: 0 0 10px var(--primary-glow) inset;
-}
-
 /* --- Controls --- */
 .controls {
     display: flex;
     gap: 1rem;
     margin-top: 1rem;
     padding: 0 0.5rem;
-    /* Ensure buttons have space on mobile edges */
 }
 
 /* Re-use 'btn-play' style */
@@ -241,4 +218,38 @@ body {
     border-color: #444;
     color: #777;
     cursor: not-allowed;
+}
+
+/*
+|--------------------------------------------------------------------------
+| MEDIA QUERY: RESTORE DESKTOP PROPORTIONS
+|--------------------------------------------------------------------------
+| Reverts fluid units to fixed units on wider screens to prevent character 
+| and boat sizes from becoming excessively large or compressed.
+*/
+@media (min-width: 600px) {
+
+    /* Restore fixed character sizing */
+    .character {
+        width: 45px;
+        height: 65px;
+        font-size: 16px;
+    }
+
+    /* Restore fixed boat sizing */
+    .boat {
+        width: 140px;
+        height: 70px;
+    }
+
+    /* Restore fixed river width */
+    .river {
+        width: 250px;
+    }
+
+    /* Recalculate fixed boat position on the right bank */
+    .boat.on-right-bank {
+        /* River width (250px) - Boat width (140px) + 5px (padding/offset) */
+        left: 115px;
+    }
 }
