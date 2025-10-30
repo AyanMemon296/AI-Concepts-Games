@@ -8,9 +8,7 @@
     --text-color: #f5f5f5;
     --text-muted: #aaa;
     --font-family: 'Consolas', 'Monaco', 'Menlo', 'Courier New', monospace;
-    
-    /* Define tile size and gap for easy adjustment */
-    --tile-size: 100px;
+
     --tile-gap: 8px;
 }
 
@@ -25,11 +23,16 @@ body {
     font-family: var(--font-family);
     background-color: var(--bg-color);
     color: var(--text-color);
+
+    /* Increased margin on sides for small viewports */
+    padding: 1rem 0.5rem;
+
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
+    /* CRITICAL: Align to top, not center */
     min-height: 100vh;
-    
+
     /* HUD grid background */
     background-image:
         linear-gradient(rgba(0, 255, 255, 0.07) 1px, transparent 1px),
@@ -38,27 +41,30 @@ body {
 }
 
 .game-container {
-    width: 90%;
-    /* Calculate max width based on 3 tiles + 2 gaps */
-    max-width: calc((var(--tile-size) * 3) + (var(--tile-gap) * 2) + (2rem * 2));
+    /* FINAL FIX: Use a responsive max-width to determine overall size */
+    width: 95%;
+    max-width: 450px;
+    min-width: 300px;
+
     background-color: var(--card-bg-color);
     border: 1px solid var(--primary-color);
     box-shadow: 0 0 25px var(--primary-glow);
     backdrop-filter: blur(8px);
-    padding: 2rem;
+    padding: 1rem;
+    /* Reduced overall padding */
     text-align: center;
 }
 
 /* --- Header & Back Button --- */
 .game-header {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 .game-header h1 {
-    font-size: 2rem;
+    font-size: 1.8rem;
     color: var(--primary-color);
     text-shadow: 0 0 8px var(--primary-glow);
-    margin-top: 1rem;
+    margin-top: 0.5rem;
 }
 
 .btn-back {
@@ -82,24 +88,25 @@ body {
 .game-info {
     display: flex;
     justify-content: space-around;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
+    padding: 0 0.5rem;
 }
 
 .info-box {
     background-color: rgba(5, 10, 20, 0.5);
     border: 1px solid var(--primary-color);
     padding: 0.5rem 1rem;
-    min-width: 120px;
+    min-width: 100px;
 }
 
 .info-box span {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     color: var(--text-muted);
     text-transform: uppercase;
 }
 
 .info-box p {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: bold;
     color: var(--secondary-color);
 }
@@ -107,15 +114,16 @@ body {
 /* --- Game Board Styling --- */
 .game-board {
     display: grid;
-    grid-template-columns: repeat(3, var(--tile-size));
-    grid-template-rows: repeat(3, var(--tile-size));
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
     gap: var(--tile-gap);
-    
-    /* Center the board */
-    justify-content: center;
-    margin-bottom: 1.5rem;
-    
-    /* Background for the grid container */
+
+    /* CRITICAL FIX: Base the grid size on the container, not the viewport */
+    width: 90%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    margin: 0 auto 1.5rem;
+
     background-color: rgba(5, 10, 20, 0.5);
     border: 2px solid var(--primary-color);
     box-shadow: 0 0 5px var(--primary-glow) inset;
@@ -123,23 +131,24 @@ body {
 }
 
 .tile {
-    width: var(--tile-size);
-    height: var(--tile-size);
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1 / 1;
     background-color: var(--card-bg-color);
     border: 1px solid var(--primary-color);
-    
-    /* Center the number */
+
     display: flex;
     justify-content: center;
     align-items: center;
-    
-    font-size: 2.5rem;
+
+    font-size: 7vw;
+    /* Base font size scales with viewport width */
     font-weight: bold;
     color: var(--secondary-color);
-    
+
     cursor: pointer;
-    user-select: none; /* Prevent text selection */
-    
+    user-select: none;
+
     transition: transform 0.2s ease-out, background-color 0.2s, box-shadow 0.2s;
 }
 
@@ -166,11 +175,15 @@ body {
 }
 
 /* --- Controls & Message --- */
+.game-controls {
+    padding: 0 0.5rem;
+}
+
 .game-controls #message {
     font-size: 1.1rem;
     color: var(--text-color);
-    margin-bottom: 1.5rem;
-    min-height: 1.5rem; /* Prevent layout shift */
+    margin-bottom: 1rem;
+    min-height: 1.5rem;
 }
 
 /* --- New Button Group --- */
@@ -200,4 +213,15 @@ body {
     color: #000;
     text-shadow: none;
     box-shadow: 0 0 15px var(--primary-glow);
+}
+
+/* |--------------------------------------------------------------------------
+| MEDIA QUERY: Capping font size on larger screens (The Correct Fix)
+|--------------------------------------------------------------------------
+*/
+@media (min-width: 500px) {
+    .tile {
+        /* Cap the font size at 2.5rem */
+        font-size: 2.5rem;
+    }
 }
