@@ -5,13 +5,16 @@
     --primary-color: #00ffff;
     --primary-glow: rgba(0, 255, 255, 0.5);
     --secondary-color: #ffffff;
+    --error-color: #ff4d4d;
     --text-color: #f5f5f5;
     --text-muted: #aaa;
-    --error-color: #ff4d4d;
     --font-family: 'Consolas', 'Monaco', 'Menlo', 'Courier New', monospace;
-    
+
     /* Water color */
     --water-color: #007bff;
+
+    /* Base dimensions */
+    --jug-base-height: 250px;
 }
 
 /* --- Basic Reset --- */
@@ -27,10 +30,12 @@ body {
     color: var(--text-color);
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* Align to top */
+    align-items: flex-start;
     min-height: 100vh;
-    padding: 2rem 0;
-    
+    padding: 1rem 0.5rem;
+    /* Added responsive padding */
+    overflow-x: hidden;
+
     /* HUD grid background */
     background-image:
         linear-gradient(rgba(0, 255, 255, 0.07) 1px, transparent 1px),
@@ -39,26 +44,26 @@ body {
 }
 
 .game-container {
-    width: 90%;
+    width: 100%;
     max-width: 800px;
     background-color: var(--card-bg-color);
     border: 1px solid var(--primary-color);
     box-shadow: 0 0 25px var(--primary-glow);
     backdrop-filter: blur(8px);
-    padding: 2rem;
+    padding: 1rem;
     text-align: center;
 }
 
-/* --- Header & Back Button --- */
+/* --- Header & Back Button (Minor Adjustments for Mobile) --- */
 .game-header {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 .game-header h1 {
-    font-size: 2rem;
+    font-size: 1.8rem;
     color: var(--primary-color);
     text-shadow: 0 0 8px var(--primary-glow);
-    margin-top: 1rem;
+    margin-top: 0.5rem;
 }
 
 .btn-back {
@@ -67,45 +72,37 @@ body {
     background-color: transparent;
     border: 1px solid var(--primary-color);
     color: var(--primary-color);
-    text-decoration: none;
     font-weight: bold;
     transition: all 0.2s;
 }
 
-.btn-back:hover {
-    background-color: var(--primary-color);
-    color: #000;
-    box-shadow: 0 0 15px var(--primary-glow);
-}
-
-/* --- New Setup Area --- */
+/* --- Setup Area (Fluid Input Grid) --- */
 .setup-area {
-    padding: 1.5rem;
+    padding: 1rem;
     background-color: rgba(5, 10, 20, 0.5);
     border: 1px solid var(--primary-color);
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
+
 .setup-area h3 {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     color: var(--primary-color);
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
+
 .setup-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 1rem;
-    margin-bottom: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1rem;
 }
-.input-group {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
+
 .input-group label {
     font-size: 0.9rem;
     color: var(--text-muted);
     margin-bottom: 0.5rem;
 }
+
 .input-group input[type="number"] {
     width: 100%;
     padding: 0.5rem;
@@ -116,33 +113,7 @@ body {
     border: 1px solid var(--primary-color);
     outline: none;
 }
-.radio-group label {
-    width: 100%; /* Make main label full width */
-}
-.radio-wrapper {
-    display: flex;
-    align-items: center;
-    margin-right: 1rem;
-}
-.radio-wrapper label {
-    margin-bottom: 0;
-    margin-left: 0.5rem;
-    color: var(--text-color);
-}
-.radio-wrapper input[type="radio"] {
-    /* Custom radio button */
-    appearance: none;
-    width: 18px;
-    height: 18px;
-    border: 2px solid var(--primary-color);
-    border-radius: 50%;
-    cursor: pointer;
-    transition: 0.2s;
-}
-.radio-wrapper input[type="radio"]:checked {
-    background-color: var(--primary-color);
-    box-shadow: 0 0 10px var(--primary-glow);
-}
+
 #setup-error {
     color: var(--error-color);
     font-weight: bold;
@@ -153,66 +124,96 @@ body {
 /* --- Goal Display --- */
 .goal-display {
     padding: 1rem;
-    background-color: rgba(5, 10, 20, 0.5);
     border: 1px solid var(--text-muted);
     margin-bottom: 1.5rem;
     min-height: 6.5rem;
 }
-.goal-display p {
-    font-size: 1.1rem;
-}
+
 #win-message {
     font-size: 1.2rem;
     color: var(--primary-color);
     font-weight: bold;
     margin-top: 0.5rem;
-    min-height: 1.2rem; /* Prevent layout shift */
 }
 
-/* --- Simulation Area --- */
+/* |--------------------------------------------------------------------------
+| SIMULATION AREA LAYOUT (RESPONSIVENESS CORE)
+|--------------------------------------------------------------------------
+*/
+
 .simulation-area {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: center;
     gap: 1.5rem;
     margin-bottom: 1.5rem;
 }
+
 .jug-area {
-    flex: 1;
+    width: 100%;
+    max-width: 400px;
     display: flex;
     justify-content: space-around;
-    gap: 2rem;
-    min-width: 250px;
-    align-items: flex-end; /* Jugs sit at the bottom */
-}
-.controls-panel {
-    flex: 1;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
-    min-width: 250px;
-}
-.controls-panel h3 {
-    grid-column: 1 / -1; /* Span full width */
-    color: var(--primary-color);
-    margin-bottom: 0.5rem;
-    border-bottom: 1px solid var(--primary-color);
-    padding-bottom: 0.5rem;
+    gap: 1rem;
+    align-items: flex-end;
 }
 
-/* --- Jug Styling --- */
+.controls-panel {
+    width: 100%;
+    max-width: 400px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+}
+
+.controls-panel h3 {
+    grid-column: 1 / -1;
+    color: var(--primary-color);
+    border-bottom: 1px solid var(--primary-color);
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* --- Jug Styling (Fluid Sizing) --- */
 .jug {
-    width: 120px;
-    height: 250px; /* Base height */
+    width: 45%;
+    max-width: 120px;
+    height: var(--jug-base-height);
     border: 3px solid var(--primary-color);
     background-color: rgba(5, 10, 20, 0.5);
     position: relative;
     overflow: hidden;
-    
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: height 0.5s ease;
+    /* Ensure jug height changes are animated */
 }
+
+/* CRITICAL FIXES FOR LABEL OVERLAP */
+.jug-label {
+    position: relative;
+    z-index: 10;
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--secondary-color);
+    text-shadow: 0 0 5px #000;
+    margin-top: -150px;
+    /* Push label away from the bottom */
+    white-space: nowrap;
+    /* Prevent label from wrapping awkwardly */
+}
+
+.jug-name {
+    position: absolute;
+    bottom: -40px;
+    /* Push name label far below the jug */
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    width: 100%;
+}
+
+/* Water Level */
 .water-level {
     position: absolute;
     bottom: 0;
@@ -222,38 +223,80 @@ body {
     opacity: 0.7;
     transition: height 0.5s ease;
 }
-.jug-label {
-    position: relative; /* To appear above water */
-    z-index: 1;
-    font-size: 1.25rem;
-    font-weight: bold;
-    color: var(--secondary-color);
-    text-shadow: 0 0 5px #000;
-}
-.jug-name {
-    position: absolute;
-    bottom: -30px;
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    width: 150px; /* Prevent wrapping */
+
+
+/* --- History and Restart --- */
+.history-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    width: 100%;
 }
 
-/* --- Action Button Styling --- */
+.history-log {
+    flex: 3;
+    min-width: 250px;
+    border: 1px solid var(--text-muted);
+    padding: 0.75rem;
+    text-align: left;
+}
+
+.history-log h3 {
+    margin-bottom: 0.5rem;
+    color: var(--text-muted);
+}
+
+#log-content {
+    height: 100px;
+    overflow-y: auto;
+    font-family: var(--font-family);
+    font-size: 0.9rem;
+}
+
+
+/* --- WIDER SCREEN LAYOUT (RESTORE SIDE-BY-SIDE) --- */
+@media (min-width: 700px) {
+    .simulation-area {
+        flex-wrap: nowrap;
+        justify-content: space-between;
+    }
+
+    .jug-area {
+        flex: 1;
+        max-width: none;
+        min-width: 300px;
+    }
+
+    .controls-panel {
+        flex: 1;
+        max-width: none;
+        min-width: 300px;
+    }
+
+    .history-controls {
+        flex-wrap: nowrap;
+    }
+}
+
+
+/* --- Button Styling (Standardized) --- */
 .btn-action {
-    padding: 0.75rem 0.5rem;
+    padding: 0.6rem 0.4rem;
+    font-size: 0.8rem;
     background-color: transparent;
     border: 1px solid var(--primary-color);
     color: var(--primary-color);
     cursor: pointer;
     font-family: var(--font-family);
-    font-size: 0.9rem;
     transition: all 0.2s;
 }
+
 .btn-action:hover {
     background-color: var(--primary-color);
     color: #000;
     box-shadow: 0 0 10px var(--primary-glow);
 }
+
 .btn-action:disabled {
     border-color: #444;
     color: #777;
@@ -261,35 +304,6 @@ body {
     background-color: transparent;
 }
 
-/* --- History and Restart --- */
-.history-controls {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-}
-.history-log {
-    flex: 3;
-    min-width: 300px;
-    background-color: rgba(5, 10, 20, 0.5);
-    border: 1px solid var(--text-muted);
-    padding: 1rem;
-    text-align: left;
-}
-.history-log h3 {
-    margin-bottom: 0.5rem;
-    color: var(--text-muted);
-}
-#log-content {
-    height: 100px;
-    overflow-y: auto;
-    font-family: var(--font-family);
-    font-size: 1rem;
-}
-#log-content p {
-    margin-bottom: 0.25rem;
-}
-
-/* --- General Button Styling --- */
 .btn-play {
     width: 100%;
     padding: 0.75rem;
@@ -302,6 +316,7 @@ body {
     cursor: pointer;
     transition: all 0.2s;
 }
+
 .btn-play:hover {
     background-color: var(--primary-color);
     color: #000;
