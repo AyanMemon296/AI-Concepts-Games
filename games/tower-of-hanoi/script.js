@@ -17,6 +17,7 @@ let gameActive = true;
 let draggedDisk = null; // Used for desktop drag-and-drop API
 let touchTargetDisk = null; // Used for custom touch drag logic
 let animationFrameId = null;
+let gameContainer = null; // Stored reference to the main container
 
 // --- Disk Colors (from CSS variables) ---
 const DISK_COLORS = [
@@ -25,7 +26,7 @@ const DISK_COLORS = [
 ];
 
 // ===============================================
-// *** UTILITY FUNCTIONS (MOVED TO TOP FOR SCOPE) ***
+// *** UTILITY FUNCTIONS ***
 // ===============================================
 
 // Helper function to display messages
@@ -52,6 +53,9 @@ function flashMessage(msg, type = 'fail') {
 
 // 1. Start/Restart Game
 function init() {
+    // CRITICAL FIX: Ensure gameContainer is set on init
+    gameContainer = document.querySelector('.game-container'); 
+    
     // Read disk count from slider
     diskCount = parseInt(diskSlider.value);
     
@@ -71,7 +75,6 @@ function init() {
     updateMoveCount();
     minMovesElement.textContent = Math.pow(2, diskCount) - 1;
     diskLabel.textContent = diskCount;
-    // CALLING setMessage IS NOW SAFE
     setMessage("Move all disks from Rod A to Rod C.", 'info');
     
     // Add event listeners
@@ -108,27 +111,24 @@ function addDragListeners() {
         disk.addEventListener('dragstart', handleDragStart);
         disk.addEventListener('dragend', handleDragEnd);
 
-        // Mobile Touch Listeners (for reliable touch pickup)
+        // Mobile Touch Listeners
         disk.addEventListener('touchstart', handleTouchStart);
     });
     
+    // Add universal touch/move listeners to the document for drag tracking
+    // These listeners must be global due to the nature of drag events
+    document.addEventListener('touchmove', handleTouchMove, { passive: false });
+    document.addEventListener('touchend', handleTouchEnd, { passive: false });
+
+    // Desktop Listeners for dropzones
     rods.forEach(rod => {
-        // Desktop Listeners
         rod.addEventListener('dragover', handleDragOver);
         rod.addEventListener('dragleave', handleDragLeave);
         rod.addEventListener('drop', handleDrop);
-        
-        // Mobile Drop Target
-        rod.addEventListener('touchmove', handleTouchMove, { passive: false });
-        rod.addEventListener('touchend', handleTouchEnd);
     });
-
-    // Add universal touch/move listeners to the document for drag tracking
-    document.addEventListener('touchmove', handleTouchMove, { passive: false });
-    document.addEventListener('touchend', handleTouchEnd, { passive: false });
 }
 
-// --- TOUCH/MOBILE HANDLERS ---
+// --- TOUCH/MOBILE HANDLERS (FIXED SCOPE ERROR) ---
 
 function handleTouchStart(e) {
     if (!gameActive || e.touches.length !== 1) return;
@@ -141,7 +141,7 @@ function handleTouchStart(e) {
         touchTargetDisk = target;
         touchTargetDisk.classList.add('dragging');
         
-        // Position the element visually to follow the finger
+        // CRITICAL: Set element to follow finger
         touchTargetDisk.style.position = 'absolute';
         touchTargetDisk.style.zIndex = 100;
         
@@ -152,15 +152,15 @@ function handleTouchStart(e) {
 }
 
 function handleTouchMove(e) {
+    // FIX: Removed 'canvas' reference. Uses document for screen coordinates.
     if (!touchTargetDisk || !gameActive) return;
     
-    e.preventDefault(); // Prevent scrolling
+    e.preventDefault();
     
     const touch = e.touches[0];
-    const rect = canvas.getBoundingClientRect();
     const diskRect = touchTargetDisk.getBoundingClientRect();
     
-    // Reposition the disk to the touch point (Adjusted for visual center)
+    // Reposition the disk to the touch point
     touchTargetDisk.style.left = `${touch.clientX - (diskRect.width / 2)}px`;
     touchTargetDisk.style.top = `${touch.clientY - (diskRect.height / 2)}px`;
 }
@@ -169,44 +169,41 @@ function handleTouchEnd(e) {
     if (!touchTargetDisk) return;
     
     const touch = e.changedTouches ? e.changedTouches[0] : e;
+    const sourceRod = touchTargetDisk.parentElement;
     
     // Identify the element currently under the finger/mouse
     let targetElement = document.elementFromPoint(touch.clientX, touch.clientY);
     let targetRod = targetElement ? targetElement.closest('.rod') : null;
 
-    if (targetRod) {
+    let moveSuccessful = false;
+
+    if (targetRod && targetRod !== sourceRod) {
         if (isValidMove(targetRod)) {
-            // Success: Append disk, which snaps it back into the flex container
-            targetRod.appendChild(touchTargetDisk);
+            // SUCCESSFUL MOVE
+            targetRod.appendChild(touchTargetDisk); 
             moveCount++;
             updateMoveCount();
             checkWin();
+            moveSuccessful = true;
         } else {
             flashMessage("Cannot place a larger disk on a smaller one!", 'fail');
         }
     }
     
-    // Reset visual and state elements
+    // --- Final Visual Reset ---
+    // If the move failed or was not attempted on a new rod, re-attach the disk to the source 
+    // to guarantee it's in the correct flex position before resetting styles.
+    if (!moveSuccessful && sourceRod) {
+        sourceRod.appendChild(touchTargetDisk); 
+    }
+
+    // Reset visual styles to return control to the CSS flex layout
     touchTargetDisk.classList.remove('dragging');
-    touchTargetDisk.style.position = 'static';
-    touchTargetDisk.style.left = '';
-    touchTargetDisk.style.top = '';
+    touchTargetDisk.style.position = ''; // Remove position:absolute entirely
+    touchTargetDisk.style.left = ''; 
+    touchTargetDisk.style.top = ''; 
     touchTargetDisk.style.zIndex = '';
     touchTargetDisk = null;
-
-    // Re-draw the graph to re-position all elements correctly within the flex layout
-    drawGraph(); 
-}
-
-function drawGraph() {
-    // This is required to visually update the 'static' position
-    // after the 'absolute' touch drag ends.
-    draw();
-}
-
-function draw() {
-    // We need a dummy draw function to trigger the DOM update quickly
-    // after the touch move/end to ensure the disk snaps back correctly.
 }
 
 // --- DESKTOP DRAG HANDLERS ---
@@ -217,7 +214,6 @@ function handleDragStart(e) {
         return;
     }
     
-    // Rule 1 check is done in the event listener binding, but re-checked here
     if (e.target !== e.target.parentElement.lastChild) {
         e.preventDefault();
         return;
@@ -237,7 +233,7 @@ function handleDragEnd(e) {
 }
 
 function handleDragOver(e) {
-    e.preventDefault(); // Crucial to allow a drop
+    e.preventDefault();
     if (!gameActive || !draggedDisk) return;
     
     const rod = e.target.closest('.rod');
@@ -294,7 +290,6 @@ function updateMoveCount() {
 
 // 11. Check for Win
 function checkWin() {
-    // Win if Rod C has all the disks
     if (rodC.children.length === diskCount) {
         setMessage("You Win!", 'win');
         gameActive = false;
