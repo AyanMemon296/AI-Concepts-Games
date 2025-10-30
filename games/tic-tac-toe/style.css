@@ -4,7 +4,8 @@
     --card-bg-color: rgba(10, 25, 47, 0.75);
     --primary-color: #00ffff;
     --primary-glow: rgba(0, 255, 255, 0.5);
-    --secondary-color: #ffffff; /* We'll use this for 'O' */
+    --secondary-color: #ffffff;
+    /* We'll use this for 'O' */
     --text-color: #f5f5f5;
     --text-muted: #aaa;
     --font-family: 'Consolas', 'Monaco', 'Menlo', 'Courier New', monospace;
@@ -28,7 +29,9 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    
+    padding: 1rem;
+    /* Added padding for smaller viewports */
+
     /* HUD grid background from main page */
     background-image:
         linear-gradient(rgba(0, 255, 255, 0.07) 1px, transparent 1px),
@@ -37,23 +40,28 @@ body {
 }
 
 .game-container {
-    width: 90%;
-    max-width: 500px;
+    /* CRITICAL FIX: Use a percentage width for responsiveness */
+    width: 95%;
+    max-width: 400px;
+    /* Reduced max-width for desktop/tablet boundary */
     background-color: var(--card-bg-color);
     border: 1px solid var(--primary-color);
     box-shadow: 0 0 25px var(--primary-glow);
     backdrop-filter: blur(8px);
-    padding: 2rem;
+    padding: 1.5rem;
+    /* Reduced padding for mobile space */
     text-align: center;
 }
 
 /* --- Header & Back Button --- */
 .game-header {
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
+    /* Reduced margin */
 }
 
 .game-header h1 {
-    font-size: 2rem;
+    font-size: 1.8rem;
+    /* Slightly reduced font size for mobile header */
     color: var(--primary-color);
     text-shadow: 0 0 8px var(--primary-glow);
     margin-top: 1rem;
@@ -78,26 +86,30 @@ body {
 
 /* --- Game Board Styling --- */
 .game-board {
+    /* Center the board within the container */
+    margin: 0 auto 1.5rem;
+    /* Ensure the board scales based on container size, not fixed pixels */
+    width: 95%;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-bottom: 2rem;
+    gap: 8px;
+    /* Slightly smaller gap */
 }
 
 .cell {
     width: 100%;
-    /* Make cells square */
     aspect-ratio: 1 / 1;
     background-color: rgba(5, 10, 20, 0.5);
     border: 2px solid var(--primary-color);
     box-shadow: 0 0 5px var(--primary-glow) inset;
-    
-    /* Center the X and O */
+
     display: flex;
     justify-content: center;
     align-items: center;
-    
-    font-size: 5rem;
+
+    /* CRITICAL FIX: Use viewport-relative font size for scaling */
+    font-size: 10vw;
+
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.2s;
@@ -109,22 +121,25 @@ body {
 
 /* Style for X */
 .cell.x {
-    color: var(--primary-color); /* Cyan */
+    color: var(--primary-color);
+    /* Cyan */
     text-shadow: 0 0 10px var(--primary-glow);
 }
 
 /* Style for O */
 .cell.o {
-    color: var(--secondary-color); /* White */
+    color: var(--secondary-color);
+    /* White */
     text-shadow: 0 0 10px var(--secondary-color);
 }
 
 /* --- Controls & Message --- */
 .game-controls #message {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
+    /* Reduced font size */
     color: var(--text-color);
-    margin-bottom: 1.5rem;
-    min-height: 2rem; /* Prevent layout shift */
+    margin-bottom: 1rem;
+    min-height: 1.5rem;
 }
 
 /* Re-use the 'btn-play' style from the homepage */
@@ -148,4 +163,19 @@ body {
     color: #000;
     text-shadow: none;
     box-shadow: 0 0 15px var(--primary-glow);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| MEDIA QUERY: Capping font size on larger screens
+|--------------------------------------------------------------------------
+| This prevents the 'X' and 'O' markers from becoming excessively large 
+| on tablets and desktops.
+*/
+@media (min-width: 450px) {
+    .cell {
+        /* Once the viewport is wider than 450px, use a fixed pixel size */
+        font-size: 45px;
+    }
 }
