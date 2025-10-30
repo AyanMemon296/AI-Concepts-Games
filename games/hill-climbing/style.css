@@ -1,143 +1,159 @@
 /* --- Global Variables & Theme Configuration --- */
 :root {
-    --bg-color: #050a14;
-    --card-bg-color: rgba(10, 25, 47, 0.75);
-    --primary-color: #00ffff;
-    --primary-glow: rgba(0, 255, 255, 0.5);
-    --secondary-color: #ffffff;
-    --error-color: #ff4d4d;
-    --win-color: #4dff4d;
-    --text-color: #f5f5f5;
-    --text-muted: #aaa;
-    --font-family: 'Consolas', 'Monaco', 'Menlo', 'Courier New', monospace;
+    --bg-color: #050a14;
+    --card-bg-color: rgba(10, 25, 47, 0.75);
+    --primary-color: #00ffff;
+    --primary-glow: rgba(0, 255, 255, 0.5);
+    --secondary-color: #ffffff;
+    --error-color: #ff4d4d;
+    --win-color: #4dff4d;
+    --text-color: #f5f5f5;
+    --text-muted: #aaa;
+    --font-family: 'Consolas', 'Monaco', 'Menlo', 'Courier New', monospace;
 }
 
 /* --- Basic Reset --- */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-    font-family: var(--font-family);
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
-    padding: 1rem 0.5rem; /* Added responsive padding */
+    font-family: var(--font-family);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 1rem 0.5rem;
+    /* Added responsive padding */
     overflow-x: hidden;
-    
-    /* HUD grid background */
-    background-image:
-        linear-gradient(rgba(0, 255, 255, 0.07) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 255, 255, 0.07) 1px, transparent 1px);
-    background-size: 25px 25px;
+
+    /* HUD grid background */
+    background-image:
+        linear-gradient(rgba(0, 255, 255, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 255, 0.07) 1px, transparent 1px);
+    background-size: 25px 25px;
 }
 
 .game-container {
     /* CRITICAL FIX: Use percentage width and smaller max-width */
-    width: 95%;
-    max-width: 600px;
-    background-color: var(--card-bg-color);
-    border: 1px solid var(--primary-color);
-    box-shadow: 0 0 25px var(--primary-glow);
-    backdrop-filter: blur(8px);
-    padding: 1rem; /* Reduced padding */
-    text-align: center;
+    width: 95%;
+    max-width: 600px;
+    background-color: var(--card-bg-color);
+    border: 1px solid var(--primary-color);
+    box-shadow: 0 0 25px var(--primary-glow);
+    backdrop-filter: blur(8px);
+    padding: 1rem;
+    /* Reduced padding */
+    text-align: center;
 }
 
 /* --- Header & Back Button --- */
 .game-header {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
 }
+
 .game-header h1 {
-    font-size: 1.8rem; /* Reduced size for mobile header */
-    color: var(--primary-color);
-    text-shadow: 0 0 8px var(--primary-glow);
-    margin-top: 0.5rem;
+    font-size: 1.8rem;
+    /* Reduced size for mobile header */
+    color: var(--primary-color);
+    text-shadow: 0 0 8px var(--primary-glow);
+    margin-top: 0.5rem;
 }
+
 .btn-back {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    background-color: transparent;
-    border: 1px solid var(--primary-color);
-    color: var(--primary-color);
-    text-decoration: none;
-    font-weight: bold;
-    transition: all 0.2s;
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.2s;
 }
+
 .btn-back:hover {
-    background-color: var(--primary-color);
-    color: #000;
-    box-shadow: 0 0 15px var(--primary-glow);
+    background-color: var(--primary-color);
+    color: #000;
+    box-shadow: 0 0 15px var(--primary-glow);
 }
 
 /* --- Message Area --- */
 .message-area {
-    padding: 0.75rem;
-    margin-bottom: 1rem; /* Reduced margin */
-    min-height: 2.5rem;
-    background-color: rgba(5, 10, 20, 0.5);
-    border: 1px solid var(--text-muted);
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    /* Reduced margin */
+    min-height: 2.5rem;
+    background-color: rgba(5, 10, 20, 0.5);
+    border: 1px solid var(--text-muted);
 }
+
 .message-area p {
-    font-size: 0.95rem; /* Reduced font size */
-    transition: color 0.3s;
+    font-size: 0.95rem;
+    /* Reduced font size */
+    transition: color 0.3s;
 }
+
 .message-area .win {
-    color: var(--win-color);
-    font-weight: bold;
+    color: var(--win-color);
+    font-weight: bold;
 }
+
 .message-area .fail {
-    color: var(--error-color);
-    font-weight: bold;
+    color: var(--error-color);
+    font-weight: bold;
 }
 
 /* --- Simulation World --- */
 .simulation-world {
-    width: 100%; /* Ensure it uses full container width */
-    aspect-ratio: 2 / 1;
-    background-color: rgba(5, 10, 20, 0.5);
-    border: 1px solid var(--primary-color);
-    margin-bottom: 1.5rem;
+    width: 100%;
+    /* Ensure it uses full container width */
+    aspect-ratio: 2 / 1;
+    background-color: rgba(5, 10, 20, 0.5);
+    border: 1px solid var(--primary-color);
+    margin-bottom: 1.5rem;
 }
 
 #landscape-canvas {
-    width: 100%; /* Canvas must fill its container */
-    height: 100%;
+    width: 100%;
+    /* Canvas must fill its container */
+    height: 100%;
 }
 
 /* --- Controls --- */
 .controls-panel {
-    display: flex;
-    gap: 1rem;
-    padding: 0 0.5rem; /* Padding for mobile edges */
+    display: flex;
+    gap: 1rem;
+    padding: 0 0.5rem;
+    /* Padding for mobile edges */
 }
 
 /* 'btn-play' for restart */
 .btn-play {
-    flex: 1;
-    padding: 0.75rem;
-    background-color: transparent;
-    border: 1px solid var(--primary-color);
-    color: var(--primary-color);
-    font-family: var(--font-family);
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.2s;
+    flex: 1;
+    padding: 0.75rem;
+    background-color: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    font-family: var(--font-family);
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
 }
+
 .btn-play:hover:not(:disabled) {
-    background-color: var(--primary-color);
-    color: #000;
-    text-shadow: none;
-    box-shadow: 0 0 15px var(--primary-glow);
+    background-color: var(--primary-color);
+    color: #000;
+    text-shadow: none;
+    box-shadow: 0 0 15px var(--primary-glow);
 }
+
 .btn-play:disabled {
-    border-color: #444;
-    color: #777;
-    cursor: not-allowed;
+    border-color: #444;
+    color: #777;
+    cursor: not-allowed;
 }
