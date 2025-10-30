@@ -6,14 +6,13 @@
     --primary-glow: rgba(0, 255, 255, 0.5);
     --secondary-color: #ffffff;
     --error-color: #ff4d4d;
+    /* For Cannibals */
     --text-color: #f5f5f5;
     --text-muted: #aaa;
     --font-family: 'Consolas', 'Monaco', 'Menlo', 'Courier New', monospace;
 
-    /* CRITICAL FIX: Base sizes based on a standard unit (vw used for initial scale) */
-    --base-unit: 0.8rem;
+    /* CRITICAL FIX: Base sizes on standard units (Used for Desktop Cap) */
     --river-width-ratio: 30%;
-    /* River takes 30% of simulation world width */
 }
 
 /* --- Basic Reset --- */
@@ -43,7 +42,7 @@ body {
 
 .game-container {
     width: 95%;
-    max-width: 650px;
+    max-width: 900px;
     background-color: var(--card-bg-color);
     border: 1px solid var(--primary-color);
     box-shadow: 0 0 25px var(--primary-glow);
@@ -100,24 +99,24 @@ body {
     font-weight: bold;
 }
 
+
 /* --- Simulation World (FLUID BASE) --- */
 .simulation-world {
     display: flex;
     width: 100%;
-    height: 300px;
-    /* Standardized Height */
+    height: 350px;
+    /* Base height */
     border: 1px solid var(--primary-color);
     background-color: rgba(5, 10, 20, 0.5);
     padding: 0.5rem;
     align-items: flex-end;
 
-    min-width: 350px;
-    overflow-x: auto;
+    /* CRITICAL FIX: Removed min-width to allow shrinking */
+    overflow-x: hidden;
 }
 
 .bank {
     flex: 1;
-    /* Banks take up equal remaining space */
     height: 100%;
     padding: 0.25rem;
     border-bottom: 5px solid var(--primary-color);
@@ -128,47 +127,48 @@ body {
 }
 
 .river {
-    width: var(--river-width-ratio);
-    /* 30% of simulation-world width */
+    width: 200px;
+    /* Base desktop width */
     height: 100%;
     background-color: rgba(0, 50, 100, 0.3);
     position: relative;
     border-bottom: 5px solid #007bff;
 }
 
-/* --- Boat and Character Sizing (FIXED) --- */
-
-/* Boat container size based on max characters */
+/* --- Boat and Character Sizing --- */
 .boat {
-    width: 140px;
-    /* Fixed maximum width for two characters + padding */
+    width: 120px;
+    /* Base boat size */
     height: 70px;
-    /* Fixed height */
     background-color: var(--card-bg-color);
     border: 2px solid var(--primary-color);
     position: absolute;
     bottom: 5px;
     left: -5px;
-    /* Aligns with the edge of the bank */
     transition: left 0.7s ease-in-out;
-    padding: 0.5rem;
+    padding: 0.5rem 0.25rem;
     display: flex;
-    gap: 0.25rem;
+    gap: 0.1rem;
     justify-content: center;
     align-items: center;
 }
 
 .boat.on-right-bank {
-    /* River width (30% of 650px = 195px) - Boat width (140px) + 5px offset */
-    left: calc(100% - 135px);
+    left: 85px;
+    /* Fixed position for 200px river */
 }
 
 .character {
-    /* Fixed base size for proportional stability */
-    width: 50px;
-    height: 60px;
+    /* CRITICAL FIX: Switched to fluid sizing based on bank width */
+    width: 30%;
+    /* Take up 30% of the available bank width (allowing 3 per row) */
+    height: 50px;
+
+    min-width: 40px;
+    /* Ensure a stable minimum size on extremely small screens */
+    min-height: 50px;
+
     cursor: grab;
-    transition: opacity 0.2s, box-shadow 0.2s;
     font-weight: bold;
     display: flex;
     justify-content: center;
@@ -186,17 +186,6 @@ body {
 .cannibal {
     background-color: var(--error-color);
     text-shadow: 0 0 5px #000;
-}
-
-/* --- Drag-and-Drop Helper Classes --- */
-.character.dragging {
-    opacity: 0.5;
-    cursor: grabbing;
-}
-
-.dropzone.drag-over {
-    background-color: rgba(0, 255, 255, 0.1);
-    box-shadow: 0 0 10px var(--primary-glow) inset;
 }
 
 /* --- Controls --- */
@@ -220,56 +209,43 @@ body {
     transition: all 0.2s;
 }
 
-.btn-play:hover:not(:disabled) {
-    background-color: var(--primary-color);
-    color: #000;
-    text-shadow: none;
-    box-shadow: 0 0 15px var(--primary-glow);
-}
-
-.btn-play:disabled {
-    border-color: #444;
-    color: #777;
-    cursor: not-allowed;
-}
-
 /*
 |--------------------------------------------------------------------------
-| MEDIA QUERY: SHRINK ALL ELEMENTS FOR MOBILE
+| MEDIA QUERY: FLUID SCALING FOR MOBILE (Screen Width < 600px)
 |--------------------------------------------------------------------------
-| Ensures that on screens smaller than 600px, the fixed elements shrink 
-| proportionally, preventing overflow.
+| Ensures that the river and boat shrink while the characters maintain a 
+| minimum size for visibility.
 */
 @media (max-width: 600px) {
-    .simulation-world {
-        /* Reduce fixed height on small screens */
-        height: 250px;
+
+    /* Reduce overall width to prevent excessive side margins */
+    .game-container {
+        max-width: 450px;
     }
 
-    /* Shrink the size of characters */
-    .character {
-        width: 35px;
-        height: 50px;
-        font-size: 14px;
-        min-width: 35px;
-        min-height: 50px;
-    }
-
-    /* Shrink the size of the boat */
-    .boat {
-        width: 100px;
-        height: 60px;
-        padding: 0.2rem;
-    }
-
-    /* Shrink the river width for better bank visibility */
+    /* Shrink the river and boat proportionally */
     .river {
         width: 100px;
     }
 
+    .boat {
+        width: 80px;
+        height: 55px;
+    }
+
     /* Adjust boat position for the new fluid/fixed river width */
     .boat.on-right-bank {
-        /* River width (100px) - Boat width (100px) + 5px offset */
-        left: calc(100% - 100px + 5px);
+        /* River width (100px) - Boat width (80px) + 5px offset = 25px */
+        left: 25px;
+    }
+
+    /* CRITICAL FIX: Ensure characters stay within bank bounds on mobile */
+    .character {
+        width: 30px;
+        /* Force minimum necessary width */
+        font-size: 12px;
+        min-width: 30px;
+        min-height: 40px;
+        height: 40px;
     }
 }
