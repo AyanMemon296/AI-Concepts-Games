@@ -1,4 +1,4 @@
-// --- DOM Elements (Renamed 'peg' to 'rod') ---
+// --- DOM Elements ---
 const rodA = document.getElementById('rod-a');
 const rodB = document.getElementById('rod-b');
 const rodC = document.getElementById('rod-c');
@@ -45,27 +45,29 @@ function init() {
     updateMoveCount();
     minMovesElement.textContent = Math.pow(2, diskCount) - 1;
     diskLabel.textContent = diskCount;
-    message.textContent = "Move all disks from Rod A to Rod C.";
-    message.className = '';
+    setMessage("Move all disks from Rod A to Rod C.", 'info');
     
     // Add event listeners
     addDragListeners();
 }
 
-// 2. Create a single disk (UPDATED)
+// 2. Create a single disk (UPDATED WIDTH CALCULATION)
 function createDisk(size, rod) {
     const disk = document.createElement('div');
     disk.classList.add('disk');
     disk.draggable = true;
     disk.dataset.size = size;
     
-    // *** UPDATED WIDTH CALCULATION ***
-    // Calculates width from 20% (size 1) to 90% (size 8)
-    const minWidth = 20;
-    const maxWidth = 90;
-    const maxDisks = 8; // Max disks allowed by slider
-    const widthStep = (maxWidth - minWidth) / (maxDisks - 1);
-    disk.style.width = `${minWidth + (size - 1) * widthStep}%`;
+    // --- FINAL WIDER WIDTH CALCULATION ---
+    // Start min width at 40% and scale up to 95% of the rod container.
+    const minWidth = 40;
+    const maxWidth = 95;
+    const maxDisks = 8;
+    const totalSteps = maxDisks - 1; // 7
+    const widthIncreasePerStep = (maxWidth - minWidth) / totalSteps; // ~7.85%
+    
+    // Width increases with size
+    disk.style.width = `${minWidth + (size - 1) * widthIncreasePerStep}%`; 
     
     disk.style.backgroundColor = DISK_COLORS[size - 1 % DISK_COLORS.length];
     
@@ -93,12 +95,10 @@ function handleDragStart(e) {
     if (!gameActive) return;
 
     // Rule 1: Can only move the top disk.
-    // In flex-column-reverse, the last child is the top.
     if (e.target === e.target.parentElement.lastChild) {
         draggedDisk = e.target;
         setTimeout(() => e.target.classList.add('dragging'), 0);
     } else {
-        // Not the top disk
         e.preventDefault();
         flashMessage("Can only move the top disk!", 'fail');
     }
@@ -173,14 +173,13 @@ function updateMoveCount() {
 function checkWin() {
     // Win if Rod C has all the disks
     if (rodC.children.length === diskCount) {
-        message.textContent = "You Win!";
-        message.className = 'win';
+        setMessage("You Win!", 'win');
         gameActive = false;
         
         // Check if optimal
         const minMoves = Math.pow(2, diskCount) - 1;
         if (moveCount === minMoves) {
-            message.textContent = `You Win! (Perfect ${minMoves} moves!)`;
+            setMessage(`You Win! (Perfect ${minMoves} moves!)`, 'win');
         }
     }
 }
