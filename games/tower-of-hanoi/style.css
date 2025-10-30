@@ -12,6 +12,9 @@
     
     /* Disk Colors */
     --disk-colors: #ff4d4d, #ffa64d, #fcf300, #4dff4d, #4d4dff, #a64dff, #ff4dff, #4dffff;
+    
+    /* NEW: Base width for the game area (used for fluid sizing) */
+    --game-area-width: 80vw;
 }
 
 /* --- Basic Reset --- */
@@ -29,7 +32,7 @@ body {
     justify-content: center;
     align-items: flex-start;
     min-height: 100vh;
-    padding: 2rem 0;
+    padding: 1rem 0.5rem; /* Fluid padding on sides */
     
     /* HUD grid background */
     background-image:
@@ -39,25 +42,25 @@ body {
 }
 
 .game-container {
-    width: 90%;
-    max-width: 900px;
+    width: 95%; /* Use most of the available width */
+    max-width: 600px; /* Reduced max-width for better control */
     background-color: var(--card-bg-color);
     border: 1px solid var(--primary-color);
     box-shadow: 0 0 25px var(--primary-glow);
     backdrop-filter: blur(8px);
-    padding: 2rem;
+    padding: 1rem; /* Reduced padding */
     text-align: center;
 }
 
 /* --- Header & Back Button --- */
 .game-header {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 .game-header h1 {
-    font-size: 2rem;
+    font-size: 1.5rem; /* Reduced size for mobile */
     color: var(--primary-color);
     text-shadow: 0 0 8px var(--primary-glow);
-    margin-top: 1rem;
+    margin-top: 0.5rem;
 }
 .btn-back {
     display: inline-block;
@@ -81,20 +84,23 @@ body {
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
-    padding: 1rem;
+    padding: 0.75rem;
     background-color: rgba(5, 10, 20, 0.5);
     border: 1px solid var(--text-muted);
     margin-bottom: 1rem;
+    flex-wrap: wrap; /* Allow wrapping on small screens */
 }
 .disk-slider {
     flex-grow: 1;
     text-align: left;
+    min-width: 150px;
 }
 #disk-count {
     width: 100%;
 }
 #restart-button {
-    min-width: 150px;
+    min-width: 100px;
+    flex-grow: 0;
 }
 
 /* --- Game Info --- */
@@ -106,16 +112,16 @@ body {
 .info-box {
     background-color: rgba(5, 10, 20, 0.5);
     border: 1px solid var(--primary-color);
-    padding: 0.5rem 1rem;
-    min-width: 150px;
+    padding: 0.5rem;
+    min-width: 120px;
 }
 .info-box span {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     color: var(--text-muted);
     text-transform: uppercase;
 }
 .info-box p {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: bold;
     color: var(--secondary-color);
 }
@@ -129,47 +135,38 @@ body {
     border: 1px solid var(--text-muted);
 }
 .message-area p {
-    font-size: 1.1rem;
+    font-size: 1rem;
     transition: color 0.3s;
-}
-.message-area .win {
-    color: var(--primary-color);
-    font-weight: bold;
-}
-.message-area .fail {
-    color: var(--error-color);
-    font-weight: bold;
 }
 
 /* --- Game Board --- */
 .game-board {
     display: flex;
     justify-content: space-around;
-    height: 300px; /* Height for rods and disks */
-    padding-top: 1rem;
+    height: 250px; /* Reduced overall height */
+    padding-top: 0.5rem;
 }
 .rod-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 30%;
+    width: 30%; /* Rod containers still take 30% of the game board space */
 }
 .rod-container span {
-    font-size: 1.5rem;
+    font-size: 1.2rem; /* Reduced font size */
     color: var(--primary-color);
-    margin-top: 0.5rem;
+    margin-top: 0.25rem;
 }
 
-/* --- Rod Styling (Updated) --- */
+/* --- Rod Styling --- */
 .rod {
     width: 100%; /* Rod container now fills the space */
     height: 100%;
-    position: relative; /* Anchor for the pseudo-element post */
+    position: relative;
     
-    /* Stack disks from the bottom up */
     display: flex;
     flex-direction: column-reverse; 
-    align-items: center; /* Center disks */
+    align-items: center;
     padding-bottom: 5px; 
 }
 
@@ -180,29 +177,25 @@ body {
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 15px; /* The post of the rod */
+    width: 10px; /* Reduced rod thickness */
     height: 100%;
     background-color: var(--primary-color);
-    box-shadow: 0 0 10px var(--primary-glow);
+    box-shadow: 0 0 5px var(--primary-glow);
     border-radius: 2px 2px 0 0;
 }
 
-/* --- Disk Styling (Updated) --- */
+/* --- Disk Styling (FINAL FIX) --- */
 .disk {
-    height: 10px; /* Very thin */
-    border-radius: 0; /* No radius */
+    height: 10px; 
+    border-radius: 0; 
     border: 1px solid rgba(0, 0, 0, 0.7); 
     cursor: grab;
     transition: background-color 0.2s;
-    margin-bottom: 2px; /* Separation */
+    margin-bottom: 2px; 
     
-    /* Text is hidden */
     color: transparent;
     font-size: 1px;
-    
-    /* Disks appear on top of the rod's post */
     z-index: 1;
-    
     box-sizing: border-box; 
 }
 
@@ -214,6 +207,26 @@ body {
 
 /* Helper class for dropzone highlighting */
 .dropzone.drag-over {
-    /* Subtle highlight on the container */
     background-color: rgba(0, 255, 255, 0.1);
+}
+
+/* --- Button Styling --- */
+.btn-play {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    font-family: var(--font-family);
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-play:hover {
+    background-color: var(--primary-color);
+    color: #000;
+    text-shadow: none;
+    box-shadow: 0 0 15px var(--primary-glow);
 }
