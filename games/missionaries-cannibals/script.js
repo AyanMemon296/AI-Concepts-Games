@@ -40,12 +40,24 @@ function init() {
     message.className = '';
 }
 
+// function createCharacter(type, location, id) {
+//     const char = document.createElement('div');
+//     char.classList.add('character', type);
+//     char.draggable = true;
+//     char.id = `char-${id}`;
+//     char.textContent = type.charAt(0).toUpperCase();
+//     location.appendChild(char);
+//     characters.push(char);
+// }
+
+//newer version with images instead of text
 function createCharacter(type, location, id) {
-    const char = document.createElement('div');
+    const char = document.createElement('img');
     char.classList.add('character', type);
     char.draggable = true;
     char.id = `char-${id}`;
-    char.textContent = type.charAt(0).toUpperCase();
+    char.src = `./assets/${type}.svg`;
+    char.alt = type;
     location.appendChild(char);
     characters.push(char);
 }
